@@ -1,0 +1,46 @@
+<?php
+$title = '我的工件';
+$this->headTitle($title);
+?>
+<h1><?= $this->escapeHtml($title); ?></h1>
+<p>
+    <a href="<?= $this->url('album', ['action' => 'add']) ?>">添加加工记录</a>
+</p>
+
+<table class="table">
+    <tr>
+        <th>备注</th>
+        <th>员工</th>
+        <th>员工ID</th>
+        <th>加工类别</th>
+        <th>零件类别</th>
+        <th>零件数量</th>
+        <th>&nbsp;</th>
+    </tr>
+    <?php foreach ($this->paginator as $album) : // <-- change here! ?>
+        <tr>
+            <td><?= $this->escapeHtml($album->title) ?></td>
+            <td><?= $this->escapeHtml($album->artist) ?></td>
+            <td><?= $this->escapeHtml($album->id_user) ?></td>
+            <td><?= $this->escapeHtml($album->work_type) ?></td>
+            <td><?= $this->escapeHtml($album->id_category) ?></td>
+            <td><?= $this->escapeHtml($album->num) ?></td>
+            <td>
+                <a href="<?= $this->url('album', ['action' => 'edit', 'id' => $album->id]) ?>">修改</a>
+                <a>&nbsp;</a>
+                <a href="<?= $this->url('album', ['action' => 'delete', 'id' => $album->id]) ?>">删除</a>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+</table>
+
+<?= $this->paginationControl(
+// The paginator object:
+    $this->paginator,
+    // The scrolling style:
+    'sliding',
+    // The partial to use to render the control:
+    'partial/paginator',
+    // The route to link to when a user clicks a control link:
+    ['route' => 'album']
+); ?>
