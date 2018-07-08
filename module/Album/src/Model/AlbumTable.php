@@ -2,6 +2,10 @@
 
 namespace Album\Model;
 
+ini_set('xdebug.var_display_max_depth', -1);
+ini_set('xdebug.var_display_max_children', -1);
+ini_set('xdebug.var_display_max_data', -1);
+
 use RuntimeException;
 use Zend\Db\TableGateway\TableGatewayInterface;
 use Zend\Db\ResultSet\ResultSet;
@@ -13,14 +17,16 @@ use Zend\Paginator\Paginator;
 class AlbumTable
 {
     private $tableGateway;
+    private $userLogin;
 
     public function __construct(TableGatewayInterface $tableGateway)
     {
         $this->tableGateway = $tableGateway;
     }
 
-    public function fetchAll($paginated = false)
+    public function fetchAll($paginated = false, $login)
     {
+        $this->userLogin = $login;
         if ($paginated) {
             return $this->fetchPaginatedResults();
         }
@@ -31,7 +37,23 @@ class AlbumTable
     private function fetchPaginatedResults()
     {
         // Create a new Select object for the table:
-        $select = new Select($this->tableGateway->getTable());
+        //$select = new Select($this->tableGateway->getTable());
+        $select = new Select();
+        $select->from([
+            'a' =>'album'
+        ]);
+        $select->join([
+            'u' => 'user'
+        ], 'u.id_user = a.id_user', '*', $select::JOIN_LEFT);
+        $select->join([
+            'c' => 'category'
+        ], 'c.id_category = a.id_category', '*', $select::JOIN_LEFT);
+        $select->join([
+            'w' => 'work_type'
+        ], 'w.id_work_type = a.work_type', '*', $select::JOIN_LEFT);
+        $select->where("u.login = '$this->userLogin'");
+
+        var_dump($select->getSqlString());
 
         // Create a new result set based on the Album entity:
         $resultSetPrototype = new ResultSet();

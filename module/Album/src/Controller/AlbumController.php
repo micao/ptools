@@ -17,26 +17,86 @@ class AlbumController extends AbstractActionController
 {
     private $table;
     private $userTable;
+    private $authService;
 
-    public function __construct(AlbumTable $table, UserTable $userTable)
+    public function __construct(AlbumTable $table, UserTable $userTable,
+                                \Zend\Authentication\AuthenticationService $authService)
     {
         $this->table = $table;
         $this->userTable = $userTable;
+        $this->authService = $authService;
+    }
+
+    /**
+     * @return AlbumTable
+     */
+    public function getTable()
+    {
+        return $this->table;
+    }
+
+    /**
+     * @param AlbumTable $table
+     */
+    public function setTable($table)
+    {
+        $this->table = $table;
+    }
+
+    /**
+     * @return UserTable
+     */
+    public function getUserTable()
+    {
+        return $this->userTable;
+    }
+
+    /**
+     * @param UserTable $userTable
+     */
+    public function setUserTable($userTable)
+    {
+        $this->userTable = $userTable;
+    }
+
+    /**
+     * @return \Zend\Authentication\AuthenticationService
+     */
+    public function getAuthService()
+    {
+        return $this->authService;
+    }
+
+    /**
+     * @param \Zend\Authentication\AuthenticationService $authService
+     */
+    public function setAuthService($authService)
+    {
+        $this->authService = $authService;
     }
 
     public function indexAction()
     {
+        if(!$this->getAuthService()->hasIdentity()) {
+            return $this->redirect()->toRoute('login');
+        }
+        $login = $this->getAuthService()->getIdentity();
+
+        var_dump($login);
         // Grab the paginator from the AlbumTable:
-        $paginator = $this->table->fetchAll(true);
+        $paginator = $this->table->fetchAll(true, $login);
 
         //$userObj = $this->userTable->find($paginator->id_user);
 
+        //var_dump($paginator);
+
+/*
         foreach ($paginator as &$item) {
             $userObj = $this->userTable->find($item->id_user);
             $item->artist = '$userObj->getName()';
             //var_dump($item);
         }
-
+*/
 //var_dump($paginator);
 
         // Set the current page to what has been passed in query string,
@@ -53,7 +113,6 @@ class AlbumController extends AbstractActionController
 
     public function addAction()
     {
-        if (Zend_R)
         $form = new AlbumForm();
         $form->get('submit')->setValue('Add');
 

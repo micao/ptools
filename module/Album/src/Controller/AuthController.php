@@ -1,17 +1,23 @@
 <?php
 
 namespace Album\Controller;
-
+/*
+ini_set('xdebug.var_display_max_depth', -1);
+ini_set('xdebug.var_display_max_children', -1);
+ini_set('xdebug.var_display_max_data', -1);
+*/
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Form\Annotation\AnnotationBuilder;
 
 use Album\Model\User\User;
+use Zend\Mvc\Plugin\FlashMessenger\FlashMessenger;
 
 class AuthController extends AbstractActionController
 {
     protected $form;
     protected $storage;
     protected $authService;
+    protected $redirect;
     
     public function __construct(
         \Zend\Authentication\AuthenticationService $authService,
@@ -29,6 +35,11 @@ class AuthController extends AbstractActionController
 
     public function getSessionStorage()
     {
+        if (! $this->storage) {
+            $this->storage = $this->getServiceLocator()
+                ->get('Album\Model\MyAuthStorage');
+        }
+
         return $this->storage;
     }
 
@@ -47,7 +58,8 @@ class AuthController extends AbstractActionController
     {
         //if already login, redirect to success page
         if ($this->getAuthService()->hasIdentity()) {
-            return $this->redirect()->toRoute('success');
+            error_log("redirect to album");
+            $this->redirect()->toRoute('album');
         }
 
         $form       = $this->getForm();
@@ -60,23 +72,19 @@ class AuthController extends AbstractActionController
 
     public function authenticateAction()
     {
-        var_dump($this->getRequest()->isPost());
         $form       = $this->getForm();
-        $redirect = 'login';
+        $this->redirect = 'login';
 
         $request = $this->getRequest();
         if ($request->isPost()) {
             $form->setData($request->getPost());
-            var_dump($request->getPost());
             if ($form->isValid()) {
-                var_dump("is validated data");
                 //check authentication...
                 $this->getAuthService()->getAdapter()
                                        ->setIdentity($request->getPost('login'))
                                        ->setCredential($request->getPost('password'));
 
                 $result = $this->getAuthService()->authenticate();
-                var_dump($result->isValid());
 
                 foreach ($result->getMessages() as $message) {
                     //save message temporary into flashmessenger
@@ -84,8 +92,7 @@ class AuthController extends AbstractActionController
                 }
 
                 if ($result->isValid()) {
-
-                    $redirect = 'success';
+                    $this->redirect = 'album';
                     //check if it has rememberMe :
                     if ($request->getPost('rememberme') == 1 ) {
                         $this->getSessionStorage()
@@ -94,12 +101,11 @@ class AuthController extends AbstractActionController
                         $this->getAuthService()->setStorage($this->getSessionStorage());
                     }
                     $this->getAuthService()->setStorage($this->getSessionStorage());
-                    $this->getAuthService()->getStorage()->write($request->getPost('username'));
+                    $this->getAuthService()->getStorage()->write($request->getPost('login'));
                 }
             }
         }
-
-        return $this->redirect()->toRoute($redirect);
+        return $this->redirect()->toRoute($this->redirect);;
     }
 
     public function logoutAction()

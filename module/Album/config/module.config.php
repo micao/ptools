@@ -58,7 +58,7 @@ return [
             'success' => array(
                 'type' => Literal::class,
                 'options' => array(
-                    'route'    => '/success',
+                    'route'    => '/album[/:action[/:id]]',
                     'defaults' => array(
                         'controller' => Controller\SuccessController::class,
                         'action'        => 'index',

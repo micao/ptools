@@ -43,6 +43,9 @@ class Module implements ConfigProviderInterface
 
                     return new TableGateway('user', $dbAdapter, null, $resultSetPrototype);
                 },
+                'Album\Model\MyAuthStorage' => function($sm){
+                    return new \Album\Model\MyAuthStorage('userlogin');
+                },
             ],
         ];
     }

@@ -16,8 +16,9 @@ class AlbumControllerFactory
         }
         $albumTable = $container->get(AlbumTable::class);
         $userTable = $container->get(UserTable::class);
+        $authService = $container->get('AuthService');
 
-        return new AlbumController($albumTable, $userTable);
+        return new AlbumController($albumTable, $userTable, $authService);
     }
 
 }

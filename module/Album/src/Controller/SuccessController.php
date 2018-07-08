@@ -7,6 +7,8 @@ use Zend\View\Model\ViewModel;
 
 class SuccessController extends AbstractActionController
 {
+    private $authService;
+
     public function __construct(
         \Zend\Authentication\AuthenticationService $authService
     ) {
