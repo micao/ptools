@@ -23,6 +23,8 @@ class Album
 
     public $id_category;
 
+    public $category;
+
     private $inputFilter;
 
     public function exchangeArray(array $data)
@@ -34,6 +36,7 @@ class Album
         $this->work_type  = (!empty($data['work_type'])) ? $data['work_type'] : null;
         $this->num  = (!empty($data['num'])) ? $data['num'] : null;
         $this->id_category  = (!empty($data['id_category'])) ? $data['id_category'] : null;
+        $this->category  = (!empty($data['category'])) ? $data['category'] : null;
     }
 
     public function getArrayCopy()
@@ -46,6 +49,7 @@ class Album
             'work_type' => $this->work_type,
             'num'           => $this->num,
             'id_category'   => $this->id_category,
+            'category'   => $this->category,
         ];
     }
 

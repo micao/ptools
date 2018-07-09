@@ -42,15 +42,17 @@ class AlbumTable
         $select->from([
             'a' =>'album'
         ]);
+
         $select->join([
             'u' => 'user'
-        ], 'u.id_user = a.id_user', '*', $select::JOIN_LEFT);
+        ], 'u.id_user = a.id_user', [], $select::JOIN_LEFT);
         $select->join([
             'c' => 'category'
-        ], 'c.id_category = a.id_category', '*', $select::JOIN_LEFT);
-        $select->join([
+        ], 'c.id_category = a.id_category', 'category', $select::JOIN_LEFT);
+/*        $select->join([
             'w' => 'work_type'
         ], 'w.id_work_type = a.work_type', '*', $select::JOIN_LEFT);
+*/
         $select->where("u.login = '$this->userLogin'");
 
         var_dump($select->getSqlString());
