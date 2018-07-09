@@ -20,7 +20,7 @@ $this->headTitle($title);
     <?php foreach ($this->paginator as $album) : // <-- change here! ?>
         <tr>
             <td><?= $this->escapeHtml($album->title) ?></td>
-            <td><?= $this->escapeHtml($album->artist) ?></td>
+            <td><?= $this->escapeHtml($album->user_name) ?></td>
             <td><?= $this->escapeHtml($album->id_user) ?></td>
             <td><?= $this->escapeHtml($album->work_type) ?></td>
             <td><?= $this->escapeHtml($album->category); ?></td>

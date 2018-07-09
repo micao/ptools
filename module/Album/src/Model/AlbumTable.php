@@ -45,14 +45,14 @@ class AlbumTable
 
         $select->join([
             'u' => 'user'
-        ], 'u.id_user = a.id_user', [], $select::JOIN_LEFT);
+        ], 'u.id_user = a.id_user', 'name', $select::JOIN_LEFT);
         $select->join([
             'c' => 'category'
         ], 'c.id_category = a.id_category', 'category', $select::JOIN_LEFT);
-/*        $select->join([
+        $select->join([
             'w' => 'work_type'
-        ], 'w.id_work_type = a.work_type', '*', $select::JOIN_LEFT);
-*/
+        ], 'w.id_work_type = a.id_work_type', 'work_type', $select::JOIN_LEFT);
+
         $select->where("u.login = '$this->userLogin'");
 
         var_dump($select->getSqlString());
@@ -94,8 +94,12 @@ class AlbumTable
     public function saveAlbum(Album $album)
     {
         $data = [
-            'artist' => $album->artist,
-            'title'  => $album->title,
+            'artist'        => $album->artist,
+            'title'         => $album->title,
+            'id_user'       => $album->id_user,
+            'id_work_type'  => $album->id_work_type,
+            'id_category'   => $album->id_category,
+            'num'           => $album->num,
         ];
 
         $id = (int) $album->id;

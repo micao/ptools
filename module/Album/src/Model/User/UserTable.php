@@ -2,6 +2,7 @@
 
 namespace Album\Model\User;
 
+use phpDocumentor\Reflection\Types\String_;
 use RuntimeException;
 use Zend\Db\TableGateway\TableGatewayInterface;
 use Zend\Db\ResultSet\ResultSet;
@@ -33,6 +34,21 @@ class UserTable
             throw new RuntimeException(sprintf(
                 'Could not find row with identifier %d',
                 $id
+            ));
+        }
+
+        return $row;
+    }
+
+    public function findByLogin($login)
+    {
+        $login  = (string) $login;
+        $rowset = $this->tableGateway->select(['login' => $login]);
+        $row    = $rowset->current();
+        if (!$row) {
+            throw new RuntimeException(sprintf(
+                'Could not find row with identifier %s',
+                $login
             ));
         }
 

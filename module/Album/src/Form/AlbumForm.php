@@ -32,13 +32,18 @@ class AlbumForm extends Form
             ],
         ]);
 
-        $select = new Element\Select('category');
+        $this->add([
+            'name'    => 'id_user',
+            'type'    => 'hidden',
+        ]);
+
+        $select = new Element\Select('id_category');
         $select->setLabel('零件类别');
         $select->setValueOptions(array(
-            '0' => '垫片',
-            '1' => '销轴',
-            '2' => '碟簧',
-            '3' => '波簧',
+            '1' => '垫片',
+            '2' => '销轴',
+            '3' => '碟簧',
+            '4' => '波簧',
         ));
         $this->add($select);
 
@@ -50,11 +55,11 @@ class AlbumForm extends Form
             ],
         ]);
 
-        $select = new Element\Select('type');
+        $select = new Element\Select('id_work_type');
         $select->setLabel('加工类别');
         $select->setValueOptions(array(
-            '0' => '加工',
-            '1' => '返工',
+            '1' => '加工',
+            '2' => '返工',
         ));
         $this->add($select);
 

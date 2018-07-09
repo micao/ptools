@@ -10,6 +10,7 @@ use Album\Form\AlbumForm;
 use Album\Model\Album;
 use Album\Model\AlbumTable;
 use Album\Model\User\UserTable;
+use Zend\Form\FormInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
@@ -18,6 +19,7 @@ class AlbumController extends AbstractActionController
     private $table;
     private $userTable;
     private $authService;
+    private $login;
 
     public function __construct(AlbumTable $table, UserTable $userTable,
                                 \Zend\Authentication\AuthenticationService $authService)
@@ -80,11 +82,10 @@ class AlbumController extends AbstractActionController
         if(!$this->getAuthService()->hasIdentity()) {
             return $this->redirect()->toRoute('login');
         }
-        $login = $this->getAuthService()->getIdentity();
+        $this->login = $this->getAuthService()->getIdentity();
 
-        var_dump($login);
         // Grab the paginator from the AlbumTable:
-        $paginator = $this->table->fetchAll(true, $login);
+        $paginator = $this->table->fetchAll(true, $this->login);
 
         //$userObj = $this->userTable->find($paginator->id_user);
 
@@ -113,12 +114,20 @@ class AlbumController extends AbstractActionController
 
     public function addAction()
     {
+        if(!$this->getAuthService()->hasIdentity()) {
+            return $this->redirect()->toRoute('login');
+        }
+        $this->login = $this->getAuthService()->getIdentity();
         $form = new AlbumForm();
-        $form->get('submit')->setValue('Add');
+        $form->get('submit')->setValue('添加');
+        $record = $this->userTable->findByLogin($this->login);
+        $form->get('artist')->setValue($record->name);
+        $form->get('id_user')->setValue((int)$record->getIdUser());
 
         $request = $this->getRequest();
 
         if (!$request->isPost()) {
+            echo 'not post';
             return ['form' => $form];
         }
 
@@ -127,6 +136,7 @@ class AlbumController extends AbstractActionController
         $form->setData($request->getPost());
 
         if (!$form->isValid()) {
+            echo 'not valid';
             return ['form' => $form];
         }
 
@@ -138,6 +148,10 @@ class AlbumController extends AbstractActionController
 
     public function editAction()
     {
+        if(!$this->getAuthService()->hasIdentity()) {
+            return $this->redirect()->toRoute('login');
+        }
+        $this->login = $this->getAuthService()->getIdentity();
         $id = (int) $this->params()->fromRoute('id', 0);
 
         if (0 === $id) {
@@ -155,7 +169,11 @@ class AlbumController extends AbstractActionController
 
         $form = new AlbumForm();
         $form->bind($album);
-        $form->get('submit')->setAttribute('value', 'Edit');
+        $form->get('submit')->setAttribute('value', '修改');
+
+        $record = $this->userTable->findByLogin($this->login);
+        $form->get('artist')->setValue($record->name);
+        $form->get('id_user')->setValue((int)$record->getIdUser());
 
         $request  = $this->getRequest();
         $viewData = ['id' => $id, 'form' => $form];
@@ -179,6 +197,10 @@ class AlbumController extends AbstractActionController
 
     public function deleteAction()
     {
+        if(!$this->getAuthService()->hasIdentity()) {
+            return $this->redirect()->toRoute('login');
+        }
+        $this->login = $this->getAuthService()->getIdentity();
         $id = (int) $this->params()->fromRoute('id', 0);
         if (!$id) {
             return $this->redirect()->toRoute('album');

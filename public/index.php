@@ -1,5 +1,6 @@
 <?php
 ini_set("display_errors", 0);
+header('Content-Type: text/html; charset=utf-8');
 
 use Zend\Mvc\Application;
 use Zend\Stdlib\ArrayUtils;

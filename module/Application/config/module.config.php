@@ -46,25 +46,25 @@ return [
     'navigation' => [
         'default' => [
             [
-                'label' => 'Home',
+                'label' => '首页',
                 'route' => 'home',
             ],
             [
-                'label' => 'Album',
+                'label' => '工件',
                 'route' => 'album',
                 'pages' => [
                     [
-                        'label'  => 'Add',
+                        'label'  => '添加',
                         'route'  => 'album',
                         'action' => 'add',
                     ],
                     [
-                        'label'  => 'Edit',
+                        'label'  => '修改',
                         'route'  => 'album',
                         'action' => 'edit',
                     ],
                     [
-                        'label'  => 'Delete',
+                        'label'  => '删除',
                         'route'  => 'album',
                         'action' => 'delete',
                     ],

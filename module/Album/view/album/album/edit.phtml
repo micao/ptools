@@ -1,5 +1,5 @@
 <?php
-$title = 'Edit album';
+$title = '编辑加工工件';
 $this->headTitle($title);
 ?>
 <h1><?= $this->escapeHtml($title) ?></h1>
@@ -10,7 +10,20 @@ $album->setAttribute('placeholder', 'Album title');
 
 $artist = $form->get('artist');
 $artist->setAttribute('class', 'form-control');
-$artist->setAttribute('placeholder', 'Artist');
+$artist->setAttribute('placeholder', '员工');
+$artist->setAttribute('readonly', 'true');
+
+$category = $form->get('id_category');
+$category->setAttribute('class', 'form-control');
+$category->setAttribute('placeholder', '请选择');
+
+$num = $form->get('num');
+$num->setAttribute('class', 'form-control');
+$num->setAttribute('placeholder', '加工数量');
+
+$type = $form->get('id_work_type');
+$type->setAttribute('class', 'form-control');
+$type->setAttribute('placeholder', '请选择');
 
 $submit = $form->get('submit');
 $submit->setAttribute('class', 'btn btn-primary');
@@ -35,7 +48,26 @@ echo $this->form()->openTag($form);
         <?= $this->formElementErrors()->render($artist, ['class' => 'help-block']) ?>
     </div>
 
+    <div class="form-group">
+        <?= $this->formLabel($category) ?>
+        <?= $this->formElement($category) ?>
+        <?= $this->formElementErrors()->render($category, ['class' => 'help-block']) ?>
+    </div>
+
+    <div class="form-group">
+        <?= $this->formLabel($num) ?>
+        <?= $this->formElement($num) ?>
+        <?= $this->formElementErrors()->render($num, ['class' => 'help-block']) ?>
+    </div>
+
+    <div class="form-group">
+        <?= $this->formLabel($type) ?>
+        <?= $this->formElement($type) ?>
+        <?= $this->formElementErrors()->render($type, ['class' => 'help-block']) ?>
+    </div>
+
 <?php
 echo $this->formSubmit($submit);
 echo $this->formHidden($form->get('id'));
+echo $this->formHidden($form->get('id_user'));
 echo $this->form()->closeTag();

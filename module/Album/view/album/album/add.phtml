@@ -13,8 +13,9 @@ $album->setAttribute('placeholder', '备注');
 $artist = $form->get('artist');
 $artist->setAttribute('class', 'form-control');
 $artist->setAttribute('placeholder', '员工');
+$artist->setAttribute('readonly', 'true');
 
-$category = $form->get('category');
+$category = $form->get('id_category');
 $category->setAttribute('class', 'form-control');
 $category->setAttribute('placeholder', '请选择');
 
@@ -22,7 +23,7 @@ $num = $form->get('num');
 $num->setAttribute('class', 'form-control');
 $num->setAttribute('placeholder', '加工数量');
 
-$type = $form->get('type');
+$type = $form->get('id_work_type');
 $type->setAttribute('class', 'form-control');
 $type->setAttribute('placeholder', '请选择');
 
@@ -70,4 +71,5 @@ echo $this->form()->openTag($form);
 <?php
 echo $this->formSubmit($submit);
 echo $this->formHidden($form->get('id'));
+echo $this->formHidden($form->get('id_user'));
 echo $this->form()->closeTag();

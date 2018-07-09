@@ -19,11 +19,15 @@ class Album
 
     public $work_type;
 
+    public $id_work_type;
+
     public $num;
 
     public $id_category;
 
     public $category;
+
+    public $user_name;
 
     private $inputFilter;
 
@@ -34,9 +38,11 @@ class Album
         $this->title  = (!empty($data['title'])) ? $data['title'] : null;
         $this->id_user = (!empty($data['id_user'])) ? $data['id_user'] : null;
         $this->work_type  = (!empty($data['work_type'])) ? $data['work_type'] : null;
+        $this->id_work_type  = (!empty($data['id_work_type'])) ? $data['id_work_type'] : null;
         $this->num  = (!empty($data['num'])) ? $data['num'] : null;
         $this->id_category  = (!empty($data['id_category'])) ? $data['id_category'] : null;
         $this->category  = (!empty($data['category'])) ? $data['category'] : null;
+        $this->user_name  = (!empty($data['name'])) ? $data['name'] : null;
     }
 
     public function getArrayCopy()
@@ -47,9 +53,11 @@ class Album
             'title'     => $this->title,
             'id_user'   => $this->id_user,
             'work_type' => $this->work_type,
+            'id_work_type' => $this->id_work_type,
             'num'           => $this->num,
             'id_category'   => $this->id_category,
             'category'   => $this->category,
+            'name'   => $this->user_name,
         ];
     }
 
